@@ -34,7 +34,7 @@ description: Use when working on the 人生副本 / 模拟人生 long-form narra
 | 2 | 写文案，冻结成 `SCRIPT_SOURCE.md` | 同上，六条叙事机制 |
 | 3 | `PROJECT_SPEC.json` + `CHARACTERS.md` | ⚠️横屏必须显式写 `captionMaxChars: 18` |
 | 4 | 出身份锚点图，**不过不许开批量** | codex 内置 image_gen |
-| 5 | 真实 TTS，拿到实测语速 | `build_narration.mjs` |
+| 5 | 真实 TTS，拿到实测语速 | `build_narration.mjs`（**末尾必崩，预期**，见坑十） |
 | 6 | 排分镜 | `scripts/pack_beats.py --punch punch.txt` → 逐镜配画面 → `scripts/build_storyboard.py` |
 | 7 | 出图 | codex，**只出图不碰几何** |
 | 8 | 几何归一 | `scripts/normalize_scenes.py --apply` |
@@ -95,7 +95,7 @@ EP01 实测：少一条就从第 10 镜起全部错位。
 
 ## 踩坑
 
-九条已实证的坑全在 `pitfalls.md`。**出图前和渲染前各读一次。**
+十条已实证的坑全在 `pitfalls.md`。**出图前和渲染前各读一次。**
 最贵的三条：开头拼接禁用 `-c copy`（标题卡会静默丢失）；
 生图侧禁做几何（会补黑边）；`codex exec` 后台跑要加 `< /dev/null`（否则挂在 stdin 一张图不出）。
 
@@ -107,6 +107,8 @@ EP01 实测：少一条就从第 10 镜起全部错位。
 - 「让 codex 顺手把尺寸调好」→ 它会补黑边
 - 「这几张图差不多，不用逐张看」→ 林砚就是这么进去的
 - 「年轻女角色的提示词跟中年角色写法一样，应该没事」→ 会跑成日系美少女，见第九条
+- 「VTT 里字幕超长了」→ 那不是字幕是主时间轴，见第十条
+- 「超过 captionMaxChars 了要修」→ 先按字号算物理宽度，31 字才到上限
 - 「改一句文案而已，图不用动」→ 编号会平移，全片配错
 - 「质检报了静音，音效没进去」→ 先逐 0.5 秒量峰值，脉冲音效会被误判
 - 「开头单独播是好的」→ `-c copy` 拼的文件单独播都是好的
