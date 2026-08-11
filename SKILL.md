@@ -31,7 +31,7 @@ description: Use when working on the 人生副本 / 模拟人生 long-form narra
 | 步 | 动作 | 工具 |
 |---|---|---|
 | 1 | 定选题与标题 | `topic-and-narrative.md` |
-| 2 | 写文案，冻结成 `SCRIPT_SOURCE.md` | 同上，六条叙事机制 |
+| 2 | 写文案，冻结成 `SCRIPT_SOURCE.md` | 同上，六条叙事机制；⚠️**并列场景必须一段一场景**（坑十二） |
 | 3 | `PROJECT_SPEC.json` + `CHARACTERS.md` | ⚠️横屏必须显式写 `captionMaxChars: 18`；⚠️**本集年份要在这一步定死**（坑十一） |
 | 4 | 出身份锚点图，**不过不许开批量** | codex 内置 image_gen |
 | 5 | 真实 TTS，拿到实测语速 | `build_narration.mjs`（**末尾必崩，预期**，见坑十） |
@@ -39,7 +39,7 @@ description: Use when working on the 人生副本 / 模拟人生 long-form narra
 | 7 | 出图 | codex，**只出图不碰几何** |
 | 8 | 几何归一 | `scripts/normalize_scenes.py --apply` |
 | 9 | 开头 | 复用固定班底七张 → 只出本集那张 → `build_flash.py` → `build_opening.py` → **人工批准** |
-| 10 | 合成、样式门、渲染 | `build_composition.mjs` → `validate_style_system.mjs` → `render_streaming_ffmpeg.mjs` |
+| 10 | 合成、样式门、渲染 | **再跑一次 build_narration** → `strip_chapter_labels.py` → `build_composition.mjs` → `validate_style_system.mjs` → `render_streaming_ffmpeg.mjs`（顺序见坑十四） |
 | 11 | 成片质检 + **逐镜人工复看** | `verify_final_video.sh` + 联系表 |
 | 12 | 抖音封面 | codex 直接出图，**标题文字让模型渲染进画面**，1080×1440 |
 
@@ -95,7 +95,7 @@ EP01 实测：少一条就从第 10 镜起全部错位。
 
 ## 踩坑
 
-十一条已实证的坑全在 `pitfalls.md`。**出图前和渲染前各读一次。**
+十四条已实证的坑全在 `pitfalls.md`。**出图前和渲染前各读一次。**
 最贵的三条：开头拼接禁用 `-c copy`（标题卡会静默丢失）；
 生图侧禁做几何（会补黑边）；`codex exec` 后台跑要加 `< /dev/null`（否则挂在 stdin 一张图不出）。
 
@@ -110,6 +110,9 @@ EP01 实测：少一条就从第 10 镜起全部错位。
 - 「VTT 里字幕超长了」→ 那不是字幕是主时间轴，见第十条
 - 「超过 captionMaxChars 了要修」→ 先按字号算物理宽度，31 字才到上限
 - 「日期我写个范围它应该懂」→ 它会编一个，必须逐个列出来，见第十一条
+- 「四个场景写一段里挺紧凑」→ 分镜会横跨，画面必跳在旁白前面，见第十二条
+- 「remap 说能继承那就继承」→ 并列场景文字雷同、相似度虚高，重配过的整章一律重出
+- 「只重跑最后一步就行」→ 上游改了，下游每一步都要重跑，见第十四条
 - 「改一句文案而已，图不用动」→ 编号会平移，全片配错
 - 「质检报了静音，音效没进去」→ 先逐 0.5 秒量峰值，脉冲音效会被误判
 - 「开头单独播是好的」→ `-c copy` 拼的文件单独播都是好的
