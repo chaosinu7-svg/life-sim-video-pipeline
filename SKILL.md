@@ -41,8 +41,11 @@ description: Use when working on the 人生副本 / 模拟人生 long-form narra
 | 9 | 开头 | `scripts/build_flash.py` → `scripts/build_opening.py` → **人工批准**后绑定 |
 | 10 | 合成、样式门、渲染 | `build_composition.mjs` → `validate_style_system.mjs` → `render_streaming_ffmpeg.mjs` |
 | 11 | 成片质检 + **逐镜人工复看** | `verify_final_video.sh` + 联系表 |
+| 12 | 抖音封面 | `scripts/build_cover.py`（1080×1440，出大字版+无字版两版让主理人挑） |
 
 改过文案就跑 `scripts/remap_scenes.py`，否则所有图配错画面且不报错。
+
+封面是**专门画的**，不是从片里截图——两条爆款的封面画风都和正片不一样。构图靠**表情对比**把故事讲完（一个得意、一个忍着）。
 
 第 6 步的 `punch.txt` 是**逐集自己定**的重锤短句清单（允许单独成镜的那些狠句子，
 每行一句）。**漏一条不会报错，但那句会被并进前一镜，从此往后所有镜头编号平移一位。**
